@@ -1,0 +1,64 @@
+[package]
+name = "rust-embedded-scripts-bench"
+version = "0.0.1"
+authors = ["Piaoger Gong <piaoger@gmail.com>"]
+edition = "2021"
+
+
+[features]
+default = []
+
+bench_all = ["default", "bench_dyon", "bench_javascript", "bench_lua", "bench_koto"]
+
+bench_rune = ["rune", "rune-modules"]
+bench_rhai = ["rhai"]
+
+bench_dyon = ["dyon"]
+bench_javascript = ["deno_core", "quick-js"]
+bench_lua = ["hlua", "rlua"]
+bench_koto = ["koto"]
+
+
+[dependencies.rhai]
+version = "1.4"
+optional = true
+
+[dependencies.rune-modules]
+version = "0.10"
+optional = true
+
+[dependencies.rune]
+version = "0.10"
+optional = true
+
+[dependencies.dyon]
+version = "0.47"
+features = []
+optional = true
+
+[dependencies.koto]
+version = "0.10"
+optional = true
+
+[dependencies.hlua]
+version = "0.4"
+optional = true
+
+[dependencies.rlua]
+version = "0.18"
+optional = true
+
+[dependencies.deno_core]
+version = "0.114"
+optional = true
+
+[dependencies.quick-js]
+version = "0.4"
+optional = true
+
+[dev-dependencies]
+criterion = { version="0.3", features=["html_reports"]}
+
+[[bench]]
+name = "bench"
+harness = false
