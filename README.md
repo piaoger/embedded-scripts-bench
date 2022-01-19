@@ -2,15 +2,15 @@
 
 Though I just wanted to compare rhai with rune, below script engines are benchmarked finally:
 
-- rhai
+- rhai (1.45k stars)
 
-- rune
+- rune (848 stars)
 
-- lua (rlua, hlua)
+- lua (rlua(1.4k stars), hlua(468 stars))
 
 - javascript (v8, quickjs)
 
-- dyon
+- dyon (1.4k stars)
 
-- koto
+- koto (251 stars)
 
