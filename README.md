@@ -1,8 +1,6 @@
 # rust-embedded-scripts-bench
 
-I just want to compare rhai with rune originally.
-
-Though I just wanted to compare rhai with rune, script engines are benchmarked finally:
+Though I just wanted to compare rhai with rune, below script engines are benchmarked finally:
 
 - rhai
 
@@ -16,7 +14,3 @@ Though I just wanted to compare rhai with rune, script engines are benchmarked f
 
 - koto
 
-
-RESULT:
-
-rune > rhai
