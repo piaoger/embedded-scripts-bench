@@ -6,14 +6,18 @@ edition = "2021"
 
 
 [features]
-default = []
+default = ["bench_rune", "bench_rhai"]
 
 bench_all = ["default", "bench_dyon", "bench_javascript", "bench_lua", "bench_koto"]
+
+# without v8, lua
+bench_lite = ["bench_rune", "bench_rhai", "bench_dyon", "bench_lite_javascript",   "bench_koto"]
 
 bench_rune = ["rune", "rune-modules"]
 bench_rhai = ["rhai"]
 
 bench_dyon = ["dyon"]
+bench_lite_javascript = ["quick-js"]
 bench_javascript = ["deno_core", "quick-js"]
 bench_lua = ["hlua", "rlua"]
 bench_koto = ["koto"]

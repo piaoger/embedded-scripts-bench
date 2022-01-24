@@ -102,7 +102,7 @@ fn bench_script_embedded(c: &mut Criterion) {
         })
     });
 
-    #[cfg(feature = "bench_javascript")]
+    #[cfg(any(feature = "bench_javascript", feature = "bench_lite_javascript"))]
     group.bench_function("quickjs_eval", |b| {
         let context = quick_js::Context::new().unwrap();
         let mut i = 0_f64;
