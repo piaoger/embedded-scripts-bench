@@ -1,6 +1,8 @@
 use criterion::{black_box, criterion_group, criterion_main, Criterion, Throughput};
 use std::sync::Arc;
 
+pub static CRC_JS: &str = include_str!("./crc.js");
+
 fn bench_script_embedded(c: &mut Criterion) {
     let mut group = c.benchmark_group("script");
     group.throughput(Throughput::Elements(1));
@@ -103,6 +105,17 @@ fn bench_script_embedded(c: &mut Criterion) {
     });
 
     #[cfg(any(feature = "bench_javascript", feature = "bench_lite_javascript"))]
+    group.bench_function("boa_eval", |b| {
+        let mut context = boa_engine::Context::default();
+
+        let mut i = 0_f64;
+        b.iter(|| {
+            context.eval("1 % 2 == 0").unwrap();
+            i += 1.0;
+        })
+    });
+
+    #[cfg(any(feature = "bench_javascript", feature = "bench_lite_javascript"))]
     group.bench_function("quickjs_eval", |b| {
         let context = quick_js::Context::new().unwrap();
         let mut i = 0_f64;
@@ -167,25 +180,52 @@ fn bench_script_embedded(c: &mut Criterion) {
         })
     });
 
-    #[cfg(feature = "bench_koto")]
-    group.bench_function("koto_fn", |b| {
-        use koto::{
-            runtime::{Value, ValueNumber},
-            Koto,
-        };
-        let mut koto = Koto::new();
-        let chunk = koto.compile("|n| n % 2 == 0").unwrap();
-        let even = koto.run_chunk(chunk).unwrap();
-        let mut i = 0_i64;
+    #[cfg(any(feature = "bench_javascript", feature = "bench_lite_javascript"))]
+    group.bench_function("js_boa_eval", |b| {
+        let mut context = boa_engine::Context::default();
+
+        let mut i = 0_f64;
         b.iter(|| {
-            let result = koto
-                .run_function(
-                    even.clone(),
-                    koto::runtime::CallArgs::Separate(&[Value::Number(ValueNumber::I64(i))]),
-                )
-                .unwrap();
-            i += 1;
-            result
+            context.eval(CRC_JS).unwrap();
+            i += 1.0;
+        })
+    });
+
+    //disable temporary
+    #[cfg(any(feature = "bench_javascript", feature = "bench_lite_javascript"))]
+    group.bench_function("js_boa_eval_fn", |b| {
+        let mut context = boa_engine::Context::default();
+        context.eval(CRC_JS).unwrap();
+        // let code = "CRC.ToModbusCRC16(\"010300000002\")".as_bytes();
+        // let statement_list = context.parse(&code).unwrap();
+        // let code_block = context.compile(&statement_list).unwrap();
+        // context.execute(code_block.clone()).unwrap();
+
+        let mut i = 0_f64;
+        b.iter(|| {
+            context.eval("CRC.ToModbusCRC16(\"010300000002\")").unwrap();
+            i += 1.0;
+        })
+    });
+
+    #[cfg(any(feature = "bench_javascript", feature = "bench_lite_javascript"))]
+    group.bench_function("js_quickjs_eval", |b| {
+        let context = quick_js::Context::new().unwrap();
+        let mut i = 0_f64;
+        b.iter(|| {
+            context.eval(CRC_JS).unwrap();
+            i += 1.0;
+        })
+    });
+
+    #[cfg(any(feature = "bench_javascript", feature = "bench_lite_javascript"))]
+    group.bench_function("js_quickjs_eval_fn", |b| {
+        let context = quick_js::Context::new().unwrap();
+        context.eval(CRC_JS).unwrap();
+        let mut i = 0_f64;
+        b.iter(|| {
+            context.eval("CRC.ToModbusCRC16(\"010300000002\")").unwrap();
+            i += 1.0;
         })
     });
 

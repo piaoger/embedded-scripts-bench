@@ -8,31 +8,31 @@ edition = "2021"
 [features]
 default = ["bench_rune", "bench_rhai"]
 
-bench_all = ["default", "bench_dyon", "bench_javascript", "bench_lua", "bench_koto"]
+bench_all = ["default", "bench_dyon", "bench_javascript", "bench_lua"]
 
 # without v8, lua
-bench_lite = ["bench_rune", "bench_rhai", "bench_dyon", "bench_lite_javascript",   "bench_koto"]
+bench_lite = ["bench_rune", "bench_rhai", "bench_dyon", "bench_lite_javascript"]
 
 bench_rune = ["rune", "rune-modules"]
 bench_rhai = ["rhai"]
 
 bench_dyon = ["dyon"]
-bench_lite_javascript = ["quick-js"]
+bench_lite_javascript = ["quick-js", "boa_engine"]
 bench_javascript = ["deno_core", "quick-js"]
 bench_lua = ["hlua", "rlua"]
-bench_koto = ["koto"]
+
 
 
 [dependencies.rhai]
-version = "1.4"
+version = "1.10"
 optional = true
 
 [dependencies.rune-modules]
-version = "0.10"
+version = "0.12"
 optional = true
 
 [dependencies.rune]
-version = "0.10"
+version = "0.12"
 optional = true
 
 [dependencies.dyon]
@@ -40,25 +40,27 @@ version = "0.47"
 features = []
 optional = true
 
-[dependencies.koto]
-version = "0.10"
-optional = true
+
 
 [dependencies.hlua]
 version = "0.4"
 optional = true
 
 [dependencies.rlua]
-version = "0.18"
+version = "0.19"
 optional = true
 
 [dependencies.deno_core]
-version = "0.114"
+version = "0.154"
 optional = true
 
 [dependencies.quick-js]
 version = "0.4"
 optional = true
+
+[dependencies.boa_engine]
+optional = true
+version = "0.16.0"
 
 [dev-dependencies]
 criterion = { version="0.3", features=["html_reports"]}
