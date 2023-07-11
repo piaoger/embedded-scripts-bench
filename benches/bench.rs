@@ -110,7 +110,8 @@ fn bench_script_embedded(c: &mut Criterion) {
 
         let mut i = 0_f64;
         b.iter(|| {
-            context.eval("1 % 2 == 0").unwrap();
+            let source = boa_engine::Source::from_bytes("1 % 2 == 0");
+            context.eval(source).unwrap();
             i += 1.0;
         })
     });
@@ -186,7 +187,8 @@ fn bench_script_embedded(c: &mut Criterion) {
 
         let mut i = 0_f64;
         b.iter(|| {
-            context.eval(CRC_JS).unwrap();
+            let source = boa_engine::Source::from_bytes(CRC_JS);
+            context.eval(source).unwrap();
             i += 1.0;
         })
     });
@@ -195,15 +197,34 @@ fn bench_script_embedded(c: &mut Criterion) {
     #[cfg(any(feature = "bench_javascript", feature = "bench_lite_javascript"))]
     group.bench_function("js_boa_eval_fn", |b| {
         let mut context = boa_engine::Context::default();
-        context.eval(CRC_JS).unwrap();
-        // let code = "CRC.ToModbusCRC16(\"010300000002\")".as_bytes();
-        // let statement_list = context.parse(&code).unwrap();
-        // let code_block = context.compile(&statement_list).unwrap();
-        // context.execute(code_block.clone()).unwrap();
 
+        // // We register a global closure function that has the name 'closure' with length 0.
+        // context
+        //     .register_global_callable(
+        //         "log",
+        //         1,
+        //         boa_engine::NativeFunction::from_copy_closure(
+        //         |_this, args, _context | {
+        //             if args.len() == 0 {
+        //                 return Ok(boa_engine::JsValue::Undefined);
+        //             }
+        //
+        //             if let Ok(arg) = args[0].to_string( _context) {
+        //                 println!("log: {}", arg.to_std_string().unwrap());
+        //                 Ok(boa_engine::JsValue::Undefined)
+        //             } else {
+        //                 Ok(boa_engine::JsValue::Undefined)
+        //             }
+        //         }
+        //         ),
+        //     )
+        //     .unwrap();
+
+
+        context.eval(boa_engine::Source::from_bytes(CRC_JS)).unwrap();
         let mut i = 0_f64;
         b.iter(|| {
-            context.eval("CRC.ToModbusCRC16(\"010300000002\")").unwrap();
+            context.eval(boa_engine::Source::from_bytes(r#"CRC.ToModbusCRC16("010300000002")"#)).unwrap();
             i += 1.0;
         })
     });

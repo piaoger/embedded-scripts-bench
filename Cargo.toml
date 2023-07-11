@@ -6,7 +6,7 @@ edition = "2021"
 
 
 [features]
-default = ["bench_rune", "bench_rhai"]
+default = [ ]
 
 bench_all = ["default", "bench_dyon", "bench_javascript", "bench_lua"]
 
@@ -22,9 +22,8 @@ bench_javascript = ["deno_core", "quick-js"]
 bench_lua = ["hlua", "rlua"]
 
 
-
 [dependencies.rhai]
-version = "1.14"
+version = "1.15"
 optional = true
 
 [dependencies.rune-modules]
@@ -51,7 +50,7 @@ version = "0.19"
 optional = true
 
 [dependencies.deno_core]
-version = "0.154"
+version = "0.190"
 optional = true
 
 [dependencies.quick-js]
@@ -60,7 +59,8 @@ optional = true
 
 [dependencies.boa_engine]
 optional = true
-version = "0.16.0"
+version = "0.17.0"
+features = ["annex-b"]
 
 [dev-dependencies]
 criterion = { version="0.3", features=["html_reports"]}
