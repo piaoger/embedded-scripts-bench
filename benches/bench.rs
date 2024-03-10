@@ -99,7 +99,7 @@ fn bench_script_embedded(c: &mut Criterion) {
 
         let mut i = 0_u64;
         b.iter(|| {
-            runtime.execute_script("test", "1 % 2 == 0");
+            runtime.execute_script("test", deno_core::FastString::Static("1 % 2 == 0"));
             i = i.wrapping_add(1);
         })
     });
@@ -150,36 +150,6 @@ fn bench_script_embedded(c: &mut Criterion) {
         })
     });
 
-    #[cfg(feature = "bench_lua")]
-    group.bench_function("hlua_fn", |b| {
-        let mut lua = hlua::Lua::new();
-        let mut i = 0_f64;
-        lua.execute::<()>("function even(x) return (x % 2) == 0 end")
-            .unwrap();
-        b.iter(|| {
-            i += 1.0;
-            let mut fun: hlua::LuaFunction<_> = lua.get("even").unwrap();
-            let result: bool = fun.call_with_args((black_box(i),)).unwrap();
-            result
-        })
-    });
-
-    #[cfg(feature = "bench_lua")]
-    group.bench_function("rlua_fn", |b| {
-        let lua = rlua::Lua::new();
-        let mut i = 0_f64;
-        lua.context(|ctx| {
-            let even = ctx
-                .load("function even(x) return x & 1 == 0 end")
-                .into_function()
-                .unwrap();
-            b.iter(|| {
-                i += 1.0;
-                let result: bool = even.call((black_box(i),)).unwrap();
-                result
-            })
-        })
-    });
 
     #[cfg(any(feature = "bench_javascript", feature = "bench_lite_javascript"))]
     group.bench_function("js_boa_eval", |b| {

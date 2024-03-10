@@ -8,9 +8,9 @@ edition = "2021"
 [features]
 default = [ ]
 
-bench_all = ["default", "bench_dyon", "bench_javascript", "bench_lua"]
+bench_all = ["bench_rune", "bench_rhai", "bench_dyon", "bench_javascript", "bench_lua"]
 
-# without v8, lua
+# without v8, luass
 bench_lite = ["bench_rune", "bench_rhai", "bench_dyon", "bench_lite_javascript"]
 
 bench_rune = ["rune", "rune-modules"]
@@ -18,12 +18,12 @@ bench_rhai = ["rhai"]
 
 bench_dyon = ["dyon"]
 bench_lite_javascript = ["quick-js", "boa_engine"]
-bench_javascript = ["deno_core", "quick-js"]
-bench_lua = ["hlua", "rlua"]
+bench_javascript = ["deno_core", "bench_lite_javascript"]
+bench_lua = [ ]
 
 
 [dependencies.rhai]
-version = "1.15"
+version = "1.17"
 optional = true
 
 [dependencies.rune-modules]
@@ -35,22 +35,12 @@ version = "0.12"
 optional = true
 
 [dependencies.dyon]
-version = "0.47"
+version = "0.49"
 features = []
 optional = true
 
-
-
-[dependencies.hlua]
-version = "0.4"
-optional = true
-
-[dependencies.rlua]
-version = "0.19"
-optional = true
-
 [dependencies.deno_core]
-version = "0.190"
+version = "0.245"
 optional = true
 
 [dependencies.quick-js]
@@ -59,7 +49,7 @@ optional = true
 
 [dependencies.boa_engine]
 optional = true
-version = "0.17.0"
+version = "0.18.0"
 features = ["annex-b"]
 
 [dev-dependencies]
